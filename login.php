@@ -7,31 +7,30 @@
     $db = Database::getInstance();
     $repo = new UserRepository($db);
 
+    $error = '';
+    $email = '';
+
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
 
         if($email === '' || $password === '') {
-            echo "メールアドレスまたはパスワードが未入力です。";
-            exit;
-        }
-        
-        if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            echo "メールアドレスの形式が正しくありません。";
-            exit;
-        }
-
-        $user = $repo->findUserByEmail($email);
-
-        if(password_verify($password, $user['password'])) {
-            //ログイン成功
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['username'] = $user['username'];
-            echo "ログイン成功";
-            header('Location: index.php');
+            $error =  "メールアドレスまたはパスワードが未入力です。";
+        }elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = "メールアドレスの形式が正しくありません。";
         }else {
-            //ログイン失敗
-            echo "パスワードが間違っています。";
+            $user = $repo->findUserByEmail($email);
+
+            if(!$user || !password_verify($password, $user['password'])) {
+                $error = "メールアドレスまたは、パスワードが間違っています。";
+            }else {
+                //ログイン成功
+                session_regenerate_id(true); // ←セッションID再生成(セキュリティ対策)
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                header('Location: index.php');
+                exit;
+            }
         }
     }
 ?>
@@ -44,6 +43,10 @@
     <title>ログイン</title>
 </head>
 <body>
+    <?php if($error): ?>
+        <p style = "color: red;"><?= htmlspecialchars($error) ?></p>
+    <?php endif; ?>
+
     <form action = '' method = 'post'>
         <input type = 'email' name = 'email' placeholder = 'メールアドレス' value = "<?= htmlspecialchars($email ?? '') ?>"><br>
         <input type = 'password' name = 'password' placeholder = 'パスワード'><br>
