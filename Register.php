@@ -1,3 +1,53 @@
+<?php
+    require_once 'Database.php';
+    require_once 'UserRepository.php';
+
+    $db = Database::getInstance();
+    $repo = new UserRepository($db);
+
+    $errors = [];
+
+    if($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $username = trim($_POST['username'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $password = $_POST['password'] ?? '';
+        $password_confirm = $_POST['password_confirm'] ?? '';
+
+        if($username === '') {
+
+        }
+
+        if($email === '') {
+
+        }elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+        }else if($repo->findUserByEmail) {
+
+        }
+
+        if($password === '') {
+
+        }elseif(!preg_match('/^[\x21-\x7E]{8,12}$/', $password)) {
+
+        }
+
+        if($password_confirm === '') {
+
+        }
+
+        if($password !== $password_confirm) {
+
+        }
+
+        if(empty($errors)) {
+            $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+            $repo->createUser($username, $email, $hashPassword);
+            header('location: Login.php');
+            exit;
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
