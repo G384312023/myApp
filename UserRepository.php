@@ -11,9 +11,16 @@
             return $this->db->selectOne($sql, [$email]);
         }
 
+        public function findUserById($id) {
+            $sql = "SELECT * FROM users WHERE id = ?";
+            return $this->db->selectOne($sql, [$id]);
+        }
+
         public function createUser($username, $email, $hashPassword) {
             $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-            return $this->db->execute($sql, [$username, $email, $hashPassword]);
+            $stmt = $this->db->getPdo()->prepare($sql);
+            $stmt->execute([$username, $email, $hashPassword]);
+            return $this->db->getPdo()->lastInsertId();
         }
     }
 ?>

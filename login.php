@@ -47,10 +47,10 @@
         <p style = "color: red;"><?= htmlspecialchars($error) ?></p>
     <?php endif; ?>
 
-    <form action = '' method = 'post'>
-        <input type = 'email' name = 'email' placeholder = 'メールアドレス' value = "<?= htmlspecialchars($email ?? '') ?>"><br>
-        <input type = 'password' name = 'password' placeholder = 'パスワード'><br>
-        <button type = 'submit'>ログイン</button>
+    <form action = "" method = "post">
+        <input type = "email" name = "email" placeholder = "メールアドレス" value = "<?= htmlspecialchars($email ?? '') ?>"><br>
+        <input type = "password" name = "password" placeholder = "パスワード"><br>
+        <button type = "submit">ログイン</button>
     </form>
 </body>
 </html>
