@@ -16,35 +16,33 @@
         $password_confirm = $_POST['password_confirm'] ?? '';
 
         if($username === '') {
-
+            $errors [] = "ユーザネームが未入力です。";
         }
 
         if($email === '') {
-
+            $errors [] = "メールアドレスが未入力です。";
         }elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-
-        }else if($repo->findUserByEmail) {
-
+            $errors [] = "メールアドレスの形式が正しくありません。";
+        }else if($repo->findUserByEmail($email)) {
+            $errors [] = "このメールアドレスはすでに登録されています。";
         }
 
         if($password === '') {
-
+            $errors [] = "パスワードが未入力です。";
         }elseif(!preg_match('/^[\x21-\x7E]{8,12}$/', $password)) {
-
+            $errors [] = "パスワードは8文字以上12文字以内で入力してください。";
         }
 
         if($password_confirm === '') {
-
-        }
-
-        if($password !== $password_confirm) {
-
+            $errors [] = "確認用パスワードが未入力です。";
+        }elseif($password !== $password_confirm) {
+            $errors [] = "パスワードと確認用パスワードが一致しません。";
         }
 
         if(empty($errors)) {
             $hashPassword = password_hash($password, PASSWORD_DEFAULT);
-            $repo->createUser($username, $email, $hashPassword);
-            $_SESSION['user_id'] = $db->lastInsertId();
+            $userId = $repo->createUser($username, $email, $hashPassword);
+            $_SESSION['user_id'] = $userId;
             header('location: Login.php');
             exit;
         }
@@ -70,9 +68,9 @@
     <?php endif; ?>
 
     <form action = "" method = "post">
-        <input type = "text" name = "username" placeholder = "ユーザーネーム"><br>
-        <input type = "email" name = "email" placeholder = "メールアドレス"><br>
-        <input type = "password" name = "password" placeholder = "パスワード"><br>
+        <input type = "text" name = "username" placeholder = "ユーザーネーム" value = "<?= htmlspecialchars($username ?? '')?>"><br>
+        <input type = "email" name = "email" placeholder = "メールアドレス" value = "<?= htmlspecialchars($email ?? '')?>"><br>
+        <input type = "password" name = "password" placeholder = "パスワード(8~12字)"><br>
         <input type = "password" name = "password_confirm" placeholder = "パスワード(確認用)"><br>
         <button type = submit>新規登録</button>
     </form>

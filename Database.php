@@ -22,6 +22,10 @@
             return self::$instance;
         }
 
+        public function getPdo() {
+            return $this->pdo;
+        }
+
         public function select($sql, $params = []) {
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute($params);
