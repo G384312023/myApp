@@ -1,4 +1,6 @@
 <?php
+    session_start();
+    
     require_once 'Database.php';
     require_once 'UserRepository.php';
 
@@ -42,6 +44,7 @@
         if(empty($errors)) {
             $hashPassword = password_hash($password, PASSWORD_DEFAULT);
             $repo->createUser($username, $email, $hashPassword);
+            $_SESSION['user_id'] = $db->lastInsertId();
             header('location: Login.php');
             exit;
         }
