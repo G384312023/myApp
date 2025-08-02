@@ -42,8 +42,12 @@
         if(empty($errors)) {
             $hashPassword = password_hash($password, PASSWORD_DEFAULT);
             $userId = $repo->createUser($username, $email, $hashPassword);
-            $_SESSION['user_id'] = $userId;
-            header('location: Login.php');
+            session_regenerate_id(true); // ←セッションID再生成(セキュリティ対策)
+            $_SESSION['user'] = [
+                'id' => $userId,
+                'username' => $username
+            ];
+            header('location: index.php');
             exit;
         }
     }

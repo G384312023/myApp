@@ -26,8 +26,10 @@
             }else {
                 //ログイン成功
                 session_regenerate_id(true); // ←セッションID再生成(セキュリティ対策)
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
+                $_SESSION['user'] = [
+                    'id' => $user['id'],
+                    'username' => $user['username']
+                ];
                 header('Location: index.php');
                 exit;
             }
