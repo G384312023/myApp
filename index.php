@@ -15,7 +15,19 @@
   <title>Todo</title>
 </head>
 <body>
-  <h2><?php echo htmlspecialchars($_SESSION['user']['username']); ?>さん！</h2>
-  <p><a href = "Logout.php">ログアウト</a></p>
+  <header>
+    <p><a href = "Logout.php">ログアウト</a></p>
+    <hr>
+  </header>
+
+  <main>
+    <h2><?php echo htmlspecialchars($_SESSION['user']['username']); ?>さん！ こんにちは！</h2>
+
+    <form action = "" method = "post">
+      <input type = "text" name = "title" placeholder = "タスク名"><br>
+      <input type = "text" name = "description" placeholder = "タスク詳細"><br>
+      <button type = "submit">新規作成</button>
+    </form>
+  </main>
 </body>
 </html>
