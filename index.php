@@ -55,7 +55,7 @@
 
     <form action = "" method = "post">
       <input type = "text" name = "title" placeholder = "タスク名" value = "<?= htmlspecialchars($title ?? '')?>"><br>
-      <input type = "text" name = "description" placeholder = "タスク詳細" value = "<?= htmlspecialchars($description ?? '')?>"><br>
+      <textarea name = "description" placeholder = "タスク詳細" value = "<?= htmlspecialchars($description ?? '')?>"></textarea><br>
       <button type = "submit">新規作成</button>
     </form>
 
@@ -69,10 +69,13 @@
         </tr>
         <?php foreach($tasks as $task): ?>
           <tr>
+            <?php $taskId = $task['id']; ?>
             <td><?= htmlspecialchars($task['title'])?></td>
             <td><?= htmlspecialchars($task['description'])?></td>
             <td><?= $task['is_done'] ? '完了' : '未完了'?></td>
             <td><?= htmlspecialchars($task['created_at'])?></td>
+            <td><a href = "Edit.php?id=<?= $taskId?>">編集</a></td>
+            <td><a href = "Delete.php?id=<?= $taskId?>" onclick="return confirm('本当に削除しますか？');">削除</a></td>
           </tr>
         <?php endforeach; ?>
         </table>
