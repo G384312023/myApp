@@ -13,6 +13,7 @@
   $repo = new TaskRepository($db);
 
   $error = '';
+  $userId = $_SESSION['user']['id'];
 
   if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title'] ?? '');
@@ -23,12 +24,13 @@
     }
 
     if(empty($error)) {
-      $userId = $_SESSION['user']['id'];
       $repo->createTask($userId, $title, $description);
       header('location: index.php');
       exit;
     }
   }
+
+  $tasks = $repo->getTasksByUserId($userId);
 ?>
 
 <!DOCTYPE html>
@@ -52,10 +54,29 @@
     <?php endif; ?>
 
     <form action = "" method = "post">
-      <input type = "text" name = "title" placeholder = "タスク名"><br>
-      <input type = "text" name = "description" placeholder = "タスク詳細"><br>
+      <input type = "text" name = "title" placeholder = "タスク名" value = "<?= htmlspecialchars($title ?? '')?>"><br>
+      <input type = "text" name = "description" placeholder = "タスク詳細" value = "<?= htmlspecialchars($description ?? '')?>"><br>
       <button type = "submit">新規作成</button>
     </form>
+
+    <?php if(!empty($tasks)): ?>
+      <table>
+        <tr>
+          <th>タスク</th>
+          <th>詳細</th>
+          <th>完了状態</th>
+          <th>登録日</th>
+        </tr>
+        <?php foreach($tasks as $task): ?>
+          <tr>
+            <td><?= htmlspecialchars($task['title'])?></td>
+            <td><?= htmlspecialchars($task['description'])?></td>
+            <td><?= $task['is_done'] ? '完了' : '未完了'?></td>
+            <td><?= htmlspecialchars($task['created_at'])?></td>
+          </tr>
+        <?php endforeach; ?>
+        </table>
+    <?php endif; ?>
   </main>
 </body>
 </html>
