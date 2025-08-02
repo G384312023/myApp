@@ -18,9 +18,8 @@
 
         public function createUser($username, $email, $hashPassword) {
             $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-            $stmt = $this->db->getPdo()->prepare($sql);
-            $stmt->execute([$username, $email, $hashPassword]);
-            return $this->db->getPdo()->lastInsertId();
+            $this->db->execute($sql, [$username, $email, $hashPassword]);
+            return $this->db->lastInsertId();
         }
     }
 ?>
