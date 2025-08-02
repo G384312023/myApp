@@ -55,7 +55,7 @@
 
     <form action = "" method = "post">
       <input type = "text" name = "title" placeholder = "タスク名" value = "<?= htmlspecialchars($title ?? '')?>"><br>
-      <input type = "text" name = "description" placeholder = "タスク詳細" value = "<?= htmlspecialchars($description ?? '')?>"><br>
+      <textarea name = "description" placeholder = "タスク詳細" value = "<?= htmlspecialchars($description ?? '')?>"></textarea><br>
       <button type = "submit">新規作成</button>
     </form>
 

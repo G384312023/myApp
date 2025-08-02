@@ -21,9 +21,9 @@
             return $this->db->execute($sql, [$userId, $title, $description]);
         }
 
-        public function updateTask($taskId, $title, $description, $isDone) {
-            $sql = "UPDATE tasks SET title = ?, description = ?, is_done = ? WHERE id = ?";
-            return $this->db->execute($sql, [$title, $description, $isDone, $taskId]);
+        public function updateTask($title, $description, $taskId) {
+            $sql = "UPDATE tasks SET title = ?, description = ? WHERE id = ?";
+            return $this->db->execute($sql, [$title, $description, $taskId]);
         }
 
         public function deleteTask($taskId) {
