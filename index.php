@@ -5,6 +5,32 @@
     header('location: Login.php');
     exit;
   }
+
+  require_once 'Database.php';
+  require_once 'TaskRepository.php';
+
+  $db = Database::getInstance();
+  $repo = new TaskRepository($db);
+
+  $error = '';
+  $userId = $_SESSION['user']['id'];
+
+  if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $title = trim($_POST['title'] ?? '');
+    $description = $_POST['description'];
+
+    if($title === '') {
+      $error = "タスク名が未入力です。";
+    }
+
+    if(empty($error)) {
+      $repo->createTask($userId, $title, $description);
+      header('location: index.php');
+      exit;
+    }
+  }
+
+  $tasks = $repo->getTasksByUserId($userId);
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +41,42 @@
   <title>Todo</title>
 </head>
 <body>
-  <h2><?php echo htmlspecialchars($_SESSION['user']['username']); ?>さん！</h2>
-  <p><a href = "Logout.php">ログアウト</a></p>
+  <header>
+    <p><a href = "Logout.php">ログアウト</a></p>
+    <hr>
+  </header>
+
+  <main>
+    <h2><?php echo htmlspecialchars($_SESSION['user']['username']); ?>さん！ こんにちは！</h2>
+
+    <?php if(!empty($error)): ?>
+      <p style = "color: red"><?= htmlspecialchars($error) ?></p>
+    <?php endif; ?>
+
+    <form action = "" method = "post">
+      <input type = "text" name = "title" placeholder = "タスク名" value = "<?= htmlspecialchars($title ?? '')?>"><br>
+      <input type = "text" name = "description" placeholder = "タスク詳細" value = "<?= htmlspecialchars($description ?? '')?>"><br>
+      <button type = "submit">新規作成</button>
+    </form>
+
+    <?php if(!empty($tasks)): ?>
+      <table>
+        <tr>
+          <th>タスク</th>
+          <th>詳細</th>
+          <th>完了状態</th>
+          <th>登録日</th>
+        </tr>
+        <?php foreach($tasks as $task): ?>
+          <tr>
+            <td><?= htmlspecialchars($task['title'])?></td>
+            <td><?= htmlspecialchars($task['description'])?></td>
+            <td><?= $task['is_done'] ? '完了' : '未完了'?></td>
+            <td><?= htmlspecialchars($task['created_at'])?></td>
+          </tr>
+        <?php endforeach; ?>
+        </table>
+    <?php endif; ?>
+  </main>
 </body>
 </html>
