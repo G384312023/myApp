@@ -26,6 +26,11 @@
             return $this->db->execute($sql, [$title, $description, $taskId]);
         }
 
+        public function updateTaskStatus($taskId, $isDone) {
+            $sql = 'UPDATE tasks SET is_done = ? WHERE id = ?';
+            return $this->db->execute($sql, [$isDone, $taskId]);
+        }
+
         public function deleteTask($taskId) {
             $sql = "DELETE FROM tasks WHERE id = ?";
             return $this->db->execute($sql, [$taskId]);

@@ -43,16 +43,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ログイン</title>
+    <link rel = "stylesheet" href = "style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <?php if($error): ?>
-        <p style = "color: red;"><?= htmlspecialchars($error) ?></p>
-    <?php endif; ?>
+<body class="auth-page">
+    <div class="auth-container">
+        <h1>ログイン</h1>
 
-    <form action = "" method = "post">
-        <input type = "email" name = "email" placeholder = "メールアドレス" value = "<?= htmlspecialchars($email ?? '') ?>"><br>
-        <input type = "password" name = "password" placeholder = "パスワード"><br>
-        <button type = "submit">ログイン</button>
-    </form>
+        <?php if($error): ?>
+            <p class="error-message"><?= htmlspecialchars($error) ?></p>
+        <?php endif; ?>
+
+        <form action = "" method = "post">
+            <input type = "email" name = "email" placeholder = "メールアドレス" value = "<?= htmlspecialchars($email ?? '') ?>"><br>
+            <input type = "password" name = "password" placeholder = "パスワード"><br>
+            <button type = "submit">ログイン</button>
+        </form>
+        <div class="auth-links">
+            <a href="Register.php">アカウントをお持ちでない方はこちら</a>
+        </div>
+    </div>
 </body>
 </html>

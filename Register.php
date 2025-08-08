@@ -59,24 +59,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ユーザー新規登録</title>
+    <link rel = "stylesheet" href = "style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <h1>ユーザー新規登録</h1>
+<body class="auth-page">
+    <div class="auth-container">
+        <h1>ユーザー新規登録</h1>
 
-    <?php if(!empty($errors)): ?>
-        <ul style = "color: red">
-            <?php foreach($errors as $error): ?>
-                <li><?= htmlspecialchars($error, ENT_QUOTES) ?></li>
-            <?php endforeach; ?>
-        </ul>
-    <?php endif; ?>
+        <?php if(!empty($errors)): ?>
+            <ul>
+                <?php foreach($errors as $error): ?>
+                    <li><?= htmlspecialchars($error, ENT_QUOTES) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
 
-    <form action = "" method = "post">
-        <input type = "text" name = "username" placeholder = "ユーザーネーム" value = "<?= htmlspecialchars($username ?? '')?>"><br>
-        <input type = "email" name = "email" placeholder = "メールアドレス" value = "<?= htmlspecialchars($email ?? '')?>"><br>
-        <input type = "password" name = "password" placeholder = "パスワード(8~12字)"><br>
-        <input type = "password" name = "password_confirm" placeholder = "パスワード(確認用)"><br>
-        <button type = submit>新規登録</button>
-    </form>
+        <form action = "" method = "post">
+            <input type = "text" name = "username" placeholder = "ユーザーネーム" value = "<?= htmlspecialchars($username ?? '')?>">
+            <input type = "email" name = "email" placeholder = "メールアドレス" value = "<?= htmlspecialchars($email ?? '')?>">
+            <input type = "password" name = "password" placeholder = "パスワード(8~12字)">
+            <input type = "password" name = "password_confirm" placeholder = "パスワード(確認用)">
+            <button type = "submit">新規登録</button>
+        </form>
+        <div class="auth-links">
+            <a href="Login.php">すでにアカウントをお持ちの方はこちら</a>
+        </div>
+    </div>
 </body>
 </html>

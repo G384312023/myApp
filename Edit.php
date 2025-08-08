@@ -54,8 +54,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit</title>
+    <link rel = "stylesheet" href = "style.css">
 </head>
 <body>
+    <head>
+        <h2>編集中...</h2>
+        <hr>
+    </head>
     <main>
         <?php if(!empty($error)): ?>
             <p style = "color: red"><?= htmlspecialchars($error) ?></p>
