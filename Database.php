@@ -4,9 +4,9 @@
         private static $instance;
 
         private function __construct() {
-            $dbn = 'mysql:dbname=test_db;host=localhost;port=8889';
-            $user = 'root';
-            $password = 'root';
+            $dbn = 'mysql:host=localhost;dbname=todo_app;charset=utf8mb4';
+            $user = '238431';
+            $password = 'ES9K#BZrfGrc';
 
             try {
                 $this->pdo = new PDO($dbn, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
