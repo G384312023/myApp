@@ -479,3 +479,114 @@ body.auth-page {
     padding: 20px;
   }
 }
+/* Markdownコンテンツのスタイル */
+.markdown-content {
+  line-height: 1.6;
+  color: var(--text-dark);
+}
+
+.markdown-fallback {
+  display: none; /* JavaScriptが動作する場合は非表示 */
+  white-space: pre-wrap; /* 改行を保持 */
+}
+
+/* JavaScriptが無効な場合のフォールバック */
+.no-js .markdown-fallback {
+  display: block;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.markdown-content h1 {
+  font-size: 1.5em;
+  border-bottom: 2px solid var(--border-light);
+  padding-bottom: 0.3em;
+}
+
+.markdown-content h2 {
+  font-size: 1.3em;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 0.2em;
+}
+
+.markdown-content h3 {
+  font-size: 1.1em;
+}
+
+.markdown-content p {
+  margin-bottom: 1em;
+}
+
+.markdown-content strong {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.markdown-content em {
+  font-style: italic;
+  color: var(--text-medium);
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+}
+
+.markdown-content li {
+  margin-bottom: 0.3em;
+}
+
+.markdown-content a {
+  color: var(--primary-color);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-bottom-color 0.2s ease;
+}
+
+.markdown-content a:hover {
+  border-bottom-color: var(--primary-color);
+}
+
+.markdown-content code {
+  background-color: var(--background-light);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  color: var(--text-dark);
+  border: 1px solid var(--border-light);
+}
+
+.markdown-content pre {
+  background-color: var(--background-light);
+  padding: 1em;
+  border-radius: 5px;
+  overflow-x: auto;
+  border: 1px solid var(--border-light);
+}
+
+.markdown-content pre code {
+  background: none;
+  padding: 0;
+  border: none;
+  font-size: 0.9em;
+}
+
+.markdown-content blockquote {
+  border-left: 4px solid var(--primary-color);
+  margin: 1em 0;
+  padding-left: 1em;
+  color: var(--text-medium);
+  font-style: italic;
+}

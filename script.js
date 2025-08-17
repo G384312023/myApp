@@ -1,4 +1,38 @@
+// Markdown処理を関数として定義
+function processMarkdown() {
+  console.log('Processing Markdown...');
+  
+  const markdownElements = document.querySelectorAll(".markdown-content");
+  console.log('Found markdown elements:', markdownElements.length);
+  
+  markdownElements.forEach((element, index) => {
+    const markdownText = element.dataset.markdown;
+    console.log(`Element ${index}: markdown text =`, markdownText);
+    console.log(`Element ${index}: marked available =`, typeof marked !== 'undefined');
+    
+    if (markdownText && typeof marked !== 'undefined') {
+      try {
+        const htmlContent = marked.parse(markdownText);
+        console.log(`Element ${index}: converted HTML =`, htmlContent);
+        element.innerHTML = htmlContent;
+      } catch (error) {
+        console.warn('Markdown parsing failed:', error);
+        element.innerHTML = '<p>' + markdownText.replace(/\n/g, '<br>') + '</p>';
+      }
+    } else {
+      console.log(`Element ${index}: Using fallback display`);
+      const fallback = element.querySelector('.markdown-fallback');
+      if (fallback) {
+        fallback.style.display = 'block';
+      }
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  console.log('DOM loaded, starting Markdown processing...');
+  processMarkdown();
+
   // ページ上の全ての '.task-checkbox' クラスを持つチェックボックス要素を取得
   const checkboxes = document.querySelectorAll(".task-checkbox");
 

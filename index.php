@@ -40,6 +40,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Todo</title>
   <link rel = "stylesheet" href = "style.css">
+  <!-- Markdown parser library -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    // marked.jsの読み込み確認
+    window.addEventListener('load', function() {
+      console.log('marked library loaded:', typeof marked !== 'undefined');
+      if (typeof marked !== 'undefined') {
+        console.log('marked version:', marked.version || 'version unknown');
+      }
+    });
+  </script>
+  <!-- Markdown parser library -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
   <header>
@@ -57,7 +70,7 @@
 
     <form action = "" method = "post">
       <input type = "text" name = "title" placeholder = "タスク名" value = "<?= htmlspecialchars($title ?? '')?>"><br>
-      <textarea name = "description" placeholder = "タスク詳細" value = "<?= htmlspecialchars($description ?? '')?>"></textarea><br>
+      <textarea name = "description" placeholder = "タスク詳細（Markdown記法対応）&#10;# 見出し1 ## 見出し2 ### 見出し3&#10;**太字** *斜体*&#10;- リスト項目&#10;[リンクテキスト](URL)&#10;`コード`" value = "<?= htmlspecialchars($description ?? '')?>"></textarea><br>
       <button type = "submit">新規作成</button>
     </form>
 
@@ -71,7 +84,10 @@
               <h3 class="task-title"><?= htmlspecialchars($task['title'])?></h3>
               <span class="task-date"><?= htmlspecialchars($task['created_at'])?></span>
             </div>
-            <p class="task-description"><?= htmlspecialchars($task['description'])?></p>
+            <div class="task-description markdown-content" data-markdown="<?= htmlspecialchars($task['description'])?>">
+              <noscript><?= htmlspecialchars($task['description'])?></noscript>
+              <div class="markdown-fallback"><?= htmlspecialchars($task['description'])?></div>
+            </div>
             <div class="task-actions">
               <span class="status-text"><?= $task['is_done'] ? '完了' : '未完了'?></span>
               <a href="Edit.php?id=<?= $taskId?>" class="button edit-button">編集</a>
@@ -84,7 +100,7 @@
       <p>まだタスクがありません。新しいタスクを作成しましょう！</p>
     <?php endif; ?>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=<?= time() ?>"></script>
   </main>
 </body>
 </html>

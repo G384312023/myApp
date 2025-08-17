@@ -68,7 +68,7 @@
 
         <form action = "" method = "post">
         <input type = "text" name = "title" placeholder = "タスク名" value = "<?= htmlspecialchars($title ?? '')?>"><br>
-        <textarea name = "description" placeholder = "タスク詳細" value = "<?= htmlspecialchars($description ?? '')?>"></textarea><br>
+        <textarea name = "description" placeholder = "タスク詳細（Markdown記法対応）&#10;# 見出し1 ## 見出し2 ### 見出し3&#10;**太字** *斜体*&#10;- リスト項目&#10;[リンクテキスト](URL)&#10;`コード`"><?= htmlspecialchars($task['description'] ?? '') ?></textarea><br>
         <button type = "submit">編集</button>
         </form>
     </main>

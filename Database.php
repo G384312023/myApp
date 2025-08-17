@@ -4,12 +4,16 @@
         private static $instance;
 
         private function __construct() {
-            $dbn = 'mysql:host=localhost;dbname=todo_app;charset=utf8mb4';
-            $user = '238431';
-            $password = 'ES9K#BZrfGrc';
+            // AWS環境では環境変数から取得、ローカルではデフォルト値を使用
+            $host = $_ENV['RDS_HOSTNAME'] ?? 'localhost';
+            $dbname = $_ENV['RDS_DB_NAME'] ?? 'todo_app';
+            $username = $_ENV['RDS_USERNAME'] ?? '238431';
+            $password = $_ENV['RDS_PASSWORD'] ?? 'ES9K#BZrfGrc';
+            
+            $dbn = "mysql:host={$host};dbname={$dbname};charset=utf8mb4";
 
             try {
-                $this->pdo = new PDO($dbn, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
+                $this->pdo = new PDO($dbn, $username, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
             } catch(PDOException $e) {
                 die('DB接続エラー : ' . $e->getMessage());
             }
