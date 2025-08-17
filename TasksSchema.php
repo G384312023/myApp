@@ -1,9 +1,8 @@
 <?php
-    $dbn = 'mysql:host=localhost;dbname=todo_app;charset=utf8mb4';
-    $user = '238431';
-    $password = 'ES9K#BZrfGrc';
-    $pdo = new PDO($dsn, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
+require_once 'Database.php';
 
+try {
+    $db = Database::getInstance();
     $sql = 'CREATE TABLE IF NOT EXISTS tasks'
             .'('
             .'id INT AUTO_INCREMENT PRIMARY KEY,'
@@ -16,6 +15,9 @@
             .'FOREIGN KEY (user_id) REFERENCES users(id)'
             .')';
     
-    $pdo -> exec($sql);
-    echo "tasksが作成されました。";
+    $db->execute($sql);
+    echo "tasks table created successfully.";
+} catch (PDOException $e) {
+    die("Database error: " . $e->getMessage());
+}
 ?>
