@@ -1,31 +1,7 @@
 <?php
-    session_start();
 
-    if(!isset($_SESSION['user'])) {
-        header('location: Login.php');
-        exit;
-    }
+// アプリケーションの心臓部であるオートローダーを最初に読み込む
+require_once __DIR__ . '/Autoload.php';
 
-    if(!isset($_GET['id'])) {
-        header('location: index.php');
-        exit;
-    }
-
-    require_once 'Database.php';
-    require_once 'TaskRepository.php';
-
-    $db = Database::getInstance();
-    $repo = new TaskRepository($db);
-
-    $taskId = (int)$_GET['id'];
-    $userId = $_SESSION['user']['id'];
-
-    $task = $repo->findTaskByTaskId($taskId);
-
-    if($task && $task['user_id'] === $userId) {
-        $repo->deleteTask($taskId);
-    }
-
-    header('location: index.php');
-    exit;
-?>
+// 削除処理を行うコントローラーを呼び出す
+require __DIR__ . '/src/controllers/DeleteController.php';

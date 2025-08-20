@@ -6,8 +6,11 @@
             $this->db = $db;
         }
 
-        public function getTasksByUserId($userId) {
-            $sql = "SELECT * FROM tasks WHERE user_id = ?";
+        public function getTasksByUserId($userId, string $sortOrder = 'DESC') {
+            // SQLインジェクションを防ぐため、ソート順の値をホワイトリストで検証
+            $order = strtoupper($sortOrder) === 'ASC' ? 'ASC' : 'DESC';
+
+            $sql = "SELECT * FROM tasks WHERE user_id = ? ORDER BY updated_at " . $order;
             return $this->db->select($sql, [$userId]);
         } 
 
