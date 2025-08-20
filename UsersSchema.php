@@ -1,9 +1,8 @@
 <?php
-    $dbn = 'mysql:host=localhost;dbname=todo_app;charset=utf8mb4';
-    $user = '238431';
-    $password = 'ES9K#BZrfGrc';
-    $pdo = new PDO($dsn, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
+require_once 'Database.php';
 
+try {
+    $db = Database::getInstance();
     $sql = 'CREATE TABLE IF NOT EXISTS users'
             .'('
             .'id INT AUTO_INCREMENT PRIMARY KEY,'
@@ -13,6 +12,9 @@
             .'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
             .')';
     
-    $pdo -> exec($sql);
-    echo "テーブルが作成されました。";
+    $db->execute($sql);
+    echo "users table created successfully.";
+} catch (PDOException $e) {
+    die("Database error: " . $e->getMessage());
+}
 ?>

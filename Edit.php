@@ -30,21 +30,22 @@
 
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $title = trim($_POST['title'] ?? '');
-        $description = $_POST['description'];
+        $description = $_POST['description'] ?? '';
 
-        if($title !== '') {
-            $repo->updateTask($title, $description, $taskId);
-            header('location: index.php');
-            exit;
+        if ($title === '') {
+            $error = "タスク名が未入力です。";
+        } else {
+            $existingTask = $repo->findTaskByTaskId($taskId);
+
+            if ($existingTask && $existingTask['user_id'] === $userId) {
+                $repo->updateTask($title, $description, $taskId);
+                header('location: index.php');
+                exit;
+            } else {
+                header('location: index.php');
+                exit;
+            }
         }
-
-        if(empty($error) && ($task && $task['user_id'] === $userId)) {
-            $repo->updateTask($title, $description, $isDone, $taskId);
-            header('location: index.php');
-            exit;
-        }
-
-        $error = "タスク名が未入力です。";
     }
 ?>
 
