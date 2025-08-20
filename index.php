@@ -8,6 +8,7 @@
 
   require_once 'Database.php';
   require_once 'TaskRepository.php';
+  require_once 'DateFormatter.php';
 
   $db = Database::getInstance();
   $repo = new TaskRepository($db);
@@ -82,7 +83,25 @@
             <div class="task-header">
               <input type="checkbox" class="task-checkbox" <?= $task['is_done'] ? 'checked' : '' ?>>
               <h3 class="task-title"><?= htmlspecialchars($task['title'])?></h3>
-              <span class="task-date"><?= htmlspecialchars($task['created_at'])?></span>
+              <span class="task-date">
+                <?php
+                    $createdTs = strtotime($task['created_at']);
+                    // updated_at が NULL の場合を考慮
+                    $updatedTs = !empty($task['updated_at']) ? strtotime($task['updated_at']) : 0;
+
+                    // データベースの ON UPDATE 機能により、更新がない場合は created_at と同じか、
+                    // ごくわずかに後の時刻が入る。1秒以上の差があれば「更新」とみなす。
+                    $isUpdated = ($updatedTs && ($updatedTs - $createdTs > 1));
+
+                    $displayDateString = $isUpdated ? $task['updated_at'] : $task['created_at'];
+                    $label = $isUpdated ? '(更新)' : '(作成)';
+
+                    // DateFormatter を使って相対時間に変換
+                    $formattedDate = DateFormatter::format($displayDateString);
+                    
+                    echo htmlspecialchars($formattedDate . ' ' . $label);
+                ?>
+              </span>
             </div>
             <div class="task-description markdown-content" data-markdown="<?= htmlspecialchars($task['description'])?>">
               <noscript><?= htmlspecialchars($task['description'])?></noscript>
