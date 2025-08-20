@@ -16,22 +16,25 @@
   $error = '';
   $userId = $_SESSION['user']['id'];
 
-  if($_SERVER['REQUEST_METHOD'] === 'POST') {
+  // 新規タスク作成処理
+  if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'])) {
     $title = trim($_POST['title'] ?? '');
-    $description = $_POST['description'];
+    $description = $_POST['description'] ?? '';
 
     if($title === '') {
       $error = "タスク名が未入力です。";
-    }
-
-    if(empty($error)) {
+    } else {
       $repo->createTask($userId, $title, $description);
       header('location: index.php');
       exit;
     }
   }
 
-  $tasks = $repo->getTasksByUserId($userId);
+  // 並べ替え順序の決定
+  $sortOrderInput = $_GET['sort'] ?? 'desc';
+  $sortOrder = strtoupper($sortOrderInput) === 'ASC' ? 'ASC' : 'DESC';
+
+  $tasks = $repo->getTasksByUserId($userId, $sortOrder);
 ?>
 
 <!DOCTYPE html>
@@ -52,8 +55,6 @@
       }
     });
   </script>
-  <!-- Markdown parser library -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
   <header>
@@ -71,11 +72,22 @@
 
     <form action = "" method = "post">
       <input type = "text" name = "title" placeholder = "タスク名" value = "<?= htmlspecialchars($title ?? '')?>"><br>
-      <textarea name = "description" placeholder = "タスク詳細（Markdown記法対応）&#10;# 見出し1 ## 見出し2 ### 見出し3&#10;**太字** *斜体*&#10;- リスト項目&#10;[リンクテキスト](URL)&#10;`コード`" value = "<?= htmlspecialchars($description ?? '')?>"></textarea><br>
+      <textarea name = "description" placeholder = "タスク詳細（Markdown記法対応）&#10;# 見出し1 ## 見出し2 ### 見出し3&#10;**太字** *斜体*&#10;- リスト項目&#10;[リンクテキスト](URL)&#10;`コード`"><?= htmlspecialchars($description ?? '') ?></textarea><br>
       <button type = "submit">新規作成</button>
     </form>
 
+    <hr>
+
     <?php if(!empty($tasks)): ?>
+      <div class="sort-options">
+        <form action="index.php" method="GET" name="sortForm">
+            <label for="sort-select">並べ替え:</label>
+            <select name="sort" id="sort-select" onchange="this.form.submit()">
+                <option value="desc" <?= ($sortOrder === 'DESC') ? 'selected' : '' ?>>新しい順</option>
+                <option value="asc" <?= ($sortOrder === 'ASC') ? 'selected' : '' ?>>古い順</option>
+            </select>
+        </form>
+      </div>
       <div id="task-list-container"> 
         <?php foreach($tasks as $task): ?>
           <?php $taskId = $task['id']; ?>
@@ -86,19 +98,11 @@
               <span class="task-date">
                 <?php
                     $createdTs = strtotime($task['created_at']);
-                    // updated_at が NULL の場合を考慮
                     $updatedTs = !empty($task['updated_at']) ? strtotime($task['updated_at']) : 0;
-
-                    // データベースの ON UPDATE 機能により、更新がない場合は created_at と同じか、
-                    // ごくわずかに後の時刻が入る。1秒以上の差があれば「更新」とみなす。
                     $isUpdated = ($updatedTs && ($updatedTs - $createdTs > 1));
-
                     $displayDateString = $isUpdated ? $task['updated_at'] : $task['created_at'];
                     $label = $isUpdated ? '(更新)' : '(作成)';
-
-                    // DateFormatter を使って相対時間に変換
                     $formattedDate = DateFormatter::format($displayDateString);
-                    
                     echo htmlspecialchars($formattedDate . ' ' . $label);
                 ?>
               </span>
