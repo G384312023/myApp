@@ -1,7 +1,7 @@
 <?php
-    session_start();
-    $_SESSION = [];
-    session_destroy();
-    header('Location: login.php');
-    exit;
-?>
+
+// アプリケーションの心臓部であるオートローダーを最初に読み込む
+require_once __DIR__ . '/Autoload.php';
+
+// ログアウト処理を行うコントローラーを呼び出す
+require __DIR__ . '/src/controllers/LogoutController.php';
