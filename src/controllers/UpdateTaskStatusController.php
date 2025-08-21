@@ -7,12 +7,6 @@
         exit();
     }
 
-    require_once 'Database.php';
-    require_once 'TaskRepository.php';
-
-    require_once 'Database.php';
-    require_once 'TaskRepository.php';
-
     //ブラウザにjson形式で応答することを伝える。
     header('Content-Type: application/json');
 
@@ -21,7 +15,7 @@
 
     $taskId = $input['id'] ?? '';
     $isDone = $input['is_done'] ?? '';
-    $userId = $_SESSION['user']['id'];
+    $userId = (int) $_SESSION['user']['id']; // 文字列を整数に変換
 
     if($taskId === '' || $isDone === '') {
         http_response_code(400);
