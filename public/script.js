@@ -36,11 +36,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- Markdown処理 ---
     const processMarkdown = () => {
         if (typeof marked !== 'undefined') {
+            // marked.jsの設定を改行対応に変更
+            marked.setOptions({
+                breaks: true, // 単一改行を<br>に変換
+                gfm: true     // GitHub Flavored Markdownを有効化
+            });
+
             const markdownElements = document.querySelectorAll(".markdown-content");
             markdownElements.forEach(element => {
                 const markdownText = element.dataset.markdown;
                 if (markdownText) {
-                    element.innerHTML = marked.parse(markdownText);
+                    // 改行を適切に処理
+                    const processedText = markdownText
+                        .replace(/\r\n/g, '\n')  // Windows改行を統一
+                        .replace(/\r/g, '\n');   // Mac改行を統一
+                    
+                    element.innerHTML = marked.parse(processedText);
                 }
             });
         }

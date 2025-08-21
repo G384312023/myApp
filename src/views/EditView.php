@@ -18,7 +18,7 @@
 
         <form action="" method="post">
             <input type="text" name="title" placeholder="タスク名" value="<?= htmlspecialchars($_POST['title'] ?? $task['title'] ?? '') ?>"><br>
-            <textarea name="description" placeholder="タスク詳細（Markdown記法対応）&#10;# 見出し1 ## 見出し2 ### 見出し3&#10;**太字** *斜体*&#10;- リスト項目&#10;[リンクテキスト](URL)&#10;`コード`"><?= htmlspecialchars($_POST['description'] ?? $task['description'] ?? '') ?></textarea><br>
+            <textarea name="description" placeholder="タスク詳細（Markdown記法対応）&#10;&#10;改行方法:&#10;- 普通に改行すると改行されます&#10;- 空行で段落分けできます&#10;&#10;その他の記法:&#10;# 見出し1 ## 見出し2 ### 見出し3&#10;**太字** *斜体*&#10;- リスト項目&#10;[リンクテキスト](URL)&#10;`コード`"><?= htmlspecialchars($_POST['description'] ?? $task['description'] ?? '') ?></textarea><br>
             <button type="submit">編集</button>
         </form>
     </main>
